@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import bootstrap from './ServerBootstrap';
 import jenkins from 'jenkins';
 import { bases } from './util/bases';
-import { Docker } from 'docker-cli-js';
+import DockerClient from './structure/DockerClient';
 
 config();
 
@@ -13,7 +13,7 @@ export const jenkinsClient = jenkins(
     }
 );
 
-export const dockerClient = new Docker();
+export const dockerClient = new DockerClient();
 
 (async() => {
 
