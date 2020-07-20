@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import bootstrap from './ServerBootstrap';
 import jenkins from 'jenkins';
 import { bases } from './util/bases';
-import DockerClient from './structure/DockerClient';
+import DockerClient from './structure/docker/DockerClient';
 
 config();
 
