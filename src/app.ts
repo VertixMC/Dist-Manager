@@ -18,5 +18,9 @@ export const dockerClient = new DockerClient();
 (async() => {
 
     await bootstrap();
+    const container = await dockerClient.getContainer('nginx');
+    if (container) {
+        console.log(await container.remove());
+    }
 
 })();

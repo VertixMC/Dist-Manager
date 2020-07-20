@@ -14,7 +14,7 @@ export default class DockerClient extends Docker {
 
         const listContainersResponse: ListContainersResponse = await this.command('ps');
 
-        return listContainersResponse.containerList.map(c => new DockerContainer(c));
+        return listContainersResponse.containerList.map(c => new DockerContainer(this, c));
 
     }
 
