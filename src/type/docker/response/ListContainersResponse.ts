@@ -1,5 +1,5 @@
 import Response from "./Response";
-import DockerContainer from "../DockerContainer";
+import DockerContainer from "../IDockerContainer";
 
 export default interface ListContainersResponse extends Response {
 
