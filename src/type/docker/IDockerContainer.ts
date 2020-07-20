@@ -1,4 +1,4 @@
-export default interface DockerContainer {
+export default interface IDockerContainer {
 
     containerId: string;
     image: string;
