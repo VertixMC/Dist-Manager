@@ -1,5 +1,5 @@
 import Build from "../../type/jenkins/notification/Build";
-import { readFile, unlink, createWriteStream } from "fs";
+import { unlink, createWriteStream, existsSync } from "fs";
 import { join } from "path";
 import { get } from "http";
 
@@ -26,11 +26,10 @@ export default class Plugin {
             const artifactName = artifact.replace('target/', '');
 
             // if artifact exists in output directory, delete it
-            // TODO: fix Plugin#fileExistsInDirectory returning true even though the file doesn't exist
             if (this.fileExistsInDirectory(artifactName)) {
 
                 unlink(join(this.pluginDirectory, artifactName), (err) => {
-
+                    
                     if (err) {
                         throw new Error(`There was an error while unlinking file ${artifactName} in ${this.pluginDirectory} -- ${err}`);
                     }
@@ -54,9 +53,7 @@ export default class Plugin {
             res.pipe(file);
             
             file.on('finish', () => {
-                
                 file.close();
-
             });
 
         });
@@ -65,17 +62,7 @@ export default class Plugin {
 
     fileExistsInDirectory(fileName: string) {
 
-        let exists = true;
-
-        readFile(join(this.pluginDirectory, fileName), (err, data) => {
-            
-            if (err) {
-                exists = false;
-            }
-
-        });
-
-        return exists;
+        return existsSync(join(this.pluginDirectory, fileName));
 
     }
 
