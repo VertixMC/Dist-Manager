@@ -5,7 +5,7 @@ const rootDir = __dirname;
 
 @ServerSettings({ 
     rootDir,
-    httpPort: 3000,
+    httpPort: 80,
     acceptMimes: ['application/json'],
     mount: {
         '/': `${rootDir}/controller/**/*.ts`,

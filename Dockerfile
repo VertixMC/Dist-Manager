@@ -7,4 +7,4 @@ ADD . .
 RUN yarn install
 
 CMD [ "yarn", "start" ]
-EXPOSE 3000
+EXPOSE 80
