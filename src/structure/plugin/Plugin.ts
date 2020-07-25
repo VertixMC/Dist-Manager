@@ -4,7 +4,7 @@ import { join } from "path";
 import { get } from "http";
 import { webhookClient } from "../../app";
 import { embeds } from "../../util/embeds";
-import { mkdir, unlink } from "fs/promises";
+import { promises as fsPromises } from 'fs';
 
 export default class Plugin {
 
@@ -32,7 +32,7 @@ export default class Plugin {
             if (this.fileExistsInDirectory(artifactName)) {
 
                 try {
-                    await unlink(join(this.pluginDirectory, artifactName));
+                    await fsPromises.unlink(join(this.pluginDirectory, artifactName));
                 } catch (e) {
                     webhookClient.send(embeds.deployFailure(e));
                 }
@@ -43,7 +43,7 @@ export default class Plugin {
             if (!this.pluginDirectoryExists()) {
 
                 try {
-                    await mkdir(this.pluginDirectory);
+                    await fsPromises.mkdir(this.pluginDirectory);
                 } catch (e) {
                     webhookClient.send(embeds.deployFailure(e))
                 }
