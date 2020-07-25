@@ -1,9 +1,10 @@
 import Build from "../../type/jenkins/notification/Build";
-import { unlink, createWriteStream, existsSync } from "fs";
+import { createWriteStream, existsSync } from "fs";
 import { join } from "path";
 import { get } from "http";
 import { webhookClient } from "../../app";
 import { embeds } from "../../util/embeds";
+import { mkdir, unlink } from "fs/promises";
 
 export default class Plugin {
 
@@ -19,11 +20,10 @@ export default class Plugin {
 
     }
 
-    // TODO: Account for errors and promisify everything
-    update(build: Build) {
+    async update(build: Build) {
 
         const buildArtifacts = build.artifacts;
-        
+         
         for (const artifact in buildArtifacts) {
 
             const artifactName = artifact.replace('target/', '');
@@ -31,13 +31,22 @@ export default class Plugin {
             // if artifact exists in output directory, delete it
             if (this.fileExistsInDirectory(artifactName)) {
 
-                unlink(join(this.pluginDirectory, artifactName), (err) => {
-                    
-                    if (err) {
-                        throw new Error(`There was an error while unlinking file ${artifactName} in ${this.pluginDirectory} -- ${err}`);
-                    }
+                try {
+                    await unlink(join(this.pluginDirectory, artifactName));
+                } catch (e) {
+                    webhookClient.send(embeds.deployFailure(e));
+                }
 
-                });
+            }
+
+            // if the plugin directory doesn't exist, create it
+            if (!this.pluginDirectoryExists()) {
+
+                try {
+                    await mkdir(this.pluginDirectory);
+                } catch (e) {
+                    webhookClient.send(embeds.deployFailure(e))
+                }
 
             }
 
@@ -62,6 +71,12 @@ export default class Plugin {
             });
 
         });
+
+    }
+
+    pluginDirectoryExists() {
+
+        return existsSync(this.pluginDirectory);
 
     }
 

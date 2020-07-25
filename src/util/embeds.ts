@@ -9,5 +9,12 @@ export const embeds = {
             .setDescription(`${readableArtifacts(build).map((a) => `- ${a}`)}`)
             .setColor('GREEN');
         return embed;
+    },
+    deployFailure: (err: string) => {
+        const embed = new MessageEmbed()
+            .setTitle(`Could not deploy artifacts`)
+            .setDescription(`ERROR: ${err}`)
+            .setColor('RED');
+        return embed;
     }
 }

@@ -15,7 +15,7 @@ export class JenkinsController {
         const plugin = pluginManager.get(body.name);
         
         if (plugin) {
-            plugin.update(body.build);
+            await plugin.update(body.build);
         }
 
         return;
