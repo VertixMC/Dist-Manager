@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+    distmanager:
+        container_name: distmanager
+        hostname: distmanager
+        volumes:
+            - ./plugins:/usr/src/app/plugins
+            - ./.env:/usr/src/app/.env
+        build:
+            context: .
+        ports:
+            - 3000:3000
+    jenkins:
+        container_name: jenkins
+        hostname: jenkins
+        volumes:
+            - ./jenkins:/var/jenkins_home
+        image: jenkins/jenkins:lts
+        ports:
+            - 3001:8080
+            - 50000:50000
