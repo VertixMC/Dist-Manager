@@ -2,6 +2,8 @@ import Build from "../../type/jenkins/notification/Build";
 import { unlink, createWriteStream, existsSync } from "fs";
 import { join } from "path";
 import { get } from "http";
+import { webhookClient } from "../../app";
+import { embeds } from "../../util/embeds";
 
 export default class Plugin {
 
@@ -17,6 +19,7 @@ export default class Plugin {
 
     }
 
+    // TODO: Account for errors and promisify everything
     update(build: Build) {
 
         const buildArtifacts = build.artifacts;
@@ -39,6 +42,8 @@ export default class Plugin {
             }
 
             this.downloadFile(buildArtifacts[artifact].archive, artifactName);
+
+            webhookClient.send(embeds.deployComplete(build));
 
         }
 
