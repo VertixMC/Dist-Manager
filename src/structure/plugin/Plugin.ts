@@ -58,6 +58,7 @@ export default class Plugin {
 
     }
 
+    // TODO: support HTTP protocol
     downloadFile(url: string, name: string) {
 
         const file = createWriteStream(join(this.pluginDirectory, name));
