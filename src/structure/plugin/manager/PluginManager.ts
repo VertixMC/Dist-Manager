@@ -11,3 +11,12 @@ pluginManager.set(
         resolve(process.cwd(), 'plugins', 'Bungeecore')
     ) 
 )
+
+pluginManager.set(
+    'Chat-Handler',
+    new Plugin(
+        'Chat-Handler',
+        'Chat-Handler',
+        resolve(process.cwd(), 'plugins', 'ChatHandler')
+    )
+)
