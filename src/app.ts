@@ -9,9 +9,14 @@ config();
 
 export const auth = process.env.AUTH_TOKEN || '';
 
+export const jenkinsAuth = {
+    user: process.env.JENKINS_USER || '',
+    password: process.env.JENKINS_PASSWORD || ''
+}
+
 export const jenkinsClient = jenkins(
     {
-        baseUrl: `https://${process.env.JENKINS_USER || ''}:${process.env.JENKINS_PASSWORD || ''}@${bases.JENKINS_URL}`,
+        baseUrl: `https://${jenkinsAuth.user}:${jenkinsAuth.password}@${bases.JENKINS_URL}`,
         promisify: true
     }
 );
