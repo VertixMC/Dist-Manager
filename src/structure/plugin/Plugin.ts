@@ -1,7 +1,7 @@
 import Build from "../../type/jenkins/notification/Build";
 import { createWriteStream, existsSync } from "fs";
 import { join } from "path";
-import { get } from "http";
+import { get } from "https";
 import { webhookClient } from "../../app";
 import { embeds } from "../../util/embeds";
 import { promises as fsPromises } from 'fs';
