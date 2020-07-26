@@ -6,7 +6,7 @@ export const embeds = {
     deployComplete: (build: Build) => {
         const embed = new MessageEmbed()
             .setTitle(`Successfully deployed artifacts`)
-            .setDescription(`${readableArtifacts(build).map((a) => `- ${a}`)}`)
+            .setDescription(`${readableArtifacts(build).map((a) => `- ${a.replace('/target', '')}\n`)}`)
             .setColor('GREEN');
         return embed;
     },
