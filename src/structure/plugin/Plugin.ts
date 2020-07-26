@@ -34,7 +34,7 @@ export default class Plugin {
                 try {
                     await fsPromises.unlink(join(this.pluginDirectory, artifactName));
                 } catch (e) {
-                    webhookClient.send(embeds.deployFailure(e));
+                    await webhookClient.send(embeds.deployFailure(e));
                 }
 
             }
@@ -45,16 +45,16 @@ export default class Plugin {
                 try {
                     await fsPromises.mkdir(this.pluginDirectory);
                 } catch (e) {
-                    webhookClient.send(embeds.deployFailure(e))
+                    await webhookClient.send(embeds.deployFailure(e))
                 }
 
             }
 
             this.downloadFile(buildArtifacts[artifact].archive, artifactName);
 
-            webhookClient.send(embeds.deployComplete(build));
-
         }
+
+        await webhookClient.send(embeds.deployComplete(build));
 
     }
 
