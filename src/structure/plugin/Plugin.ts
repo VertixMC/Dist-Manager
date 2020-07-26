@@ -1,10 +1,10 @@
 import Build from "../../type/jenkins/notification/Build";
 import { createWriteStream, existsSync } from "fs";
 import { join } from "path";
-import { get } from "https";
-import { webhookClient } from "../../app";
+import { webhookClient, jenkinsAuth } from "../../app";
 import { embeds } from "../../util/embeds";
-import { promises as fsPromises } from 'fs';
+import { promises as fsPromises } from "fs";
+import fetch from "node-fetch";
 
 export default class Plugin {
 
@@ -50,7 +50,7 @@ export default class Plugin {
 
             }
 
-            this.downloadFile(buildArtifacts[artifact].archive, artifactName);
+            await this.downloadFile(buildArtifacts[artifact].archive, `${jenkinsAuth.user}:${jenkinsAuth.password}`, artifactName);
 
         }
 
@@ -58,20 +58,29 @@ export default class Plugin {
 
     }
 
-    // TODO: support HTTP protocol
-    downloadFile(url: string, name: string) {
+    async downloadFile(url: string, credentials: string, name: string) {
 
         const file = createWriteStream(join(this.pluginDirectory, name));
         
-        get(url, res => {
-            
-            res.pipe(file);
-            
+        const res = await fetch(url, {
+            headers: {
+                'Authorization': `Basic ${Buffer.from(credentials).toString('base64')}`
+            }
+        });
+
+        if (res.ok) {
+
+            if (res.headers.get('content-type') != 'application/java-archive') {
+                return await webhookClient.send(embeds.deployFailure('File is not a jar file'));
+            }
+
+            res.body.pipe(file);
+
             file.on('finish', () => {
                 file.close();
             });
 
-        });
+        }
 
     }
 
